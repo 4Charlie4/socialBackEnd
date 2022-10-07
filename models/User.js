@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const validateEmail = require("../utils/emailFormat");
 
 const UserSchema = new Schema(
   {
@@ -13,7 +14,15 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
-      //Requires match/validator to make sure correct input for emails
+      //Validates whether the input is a valid email .
+      validate: [
+        validateEmail,
+        "Please make sure your email address is formatted correctly.",
+      ],
+      match: [
+        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/,
+        "Please make sure your email address is formatted correctly.",
+      ],
     },
 
     thoughts: [
@@ -32,11 +41,18 @@ const UserSchema = new Schema(
   {
     JSON: {
       virtuals: true,
+      getters: true,
     },
   }
 );
 
 //Virtual goes here
+UserSchema.virtual("thoughtCount").get(function () {
+  return this.thoughts.reduce(
+    (total, thought) => total + thought.reactions.length + 1,
+    0
+  );
+});
 
 const User = model("User", UserSchema);
 
