@@ -1,4 +1,27 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, Types } = require("mongoose");
+
+//Subdocument for thoughts
+const ReactionSchema = new Schema({
+  reactionId: {
+    type: Schema.Types.ObjectId,
+    default: () => new Types.ObjectId(),
+  },
+  reactionBody: {
+    type: String,
+    required: true,
+    minLength: 1,
+    maxLength: 280,
+  },
+  username: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    //Get method here to format date.
+  },
+});
 
 const ThoughtSchema = new Schema(
   {
@@ -17,16 +40,13 @@ const ThoughtSchema = new Schema(
       type: String,
       required: true,
     },
-    //   reactions: [
-    //     {
-    //       type: Schema.Types.ObjectId,
-    //       ref: "reaction",
-    //     },
-    //   ],
   },
   {
     JSON: {
       virtuals: true,
+      getters: true,
     },
   }
 );
+
+//Virtual will go here
