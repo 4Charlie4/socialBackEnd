@@ -20,7 +20,7 @@ const UserSchema = new Schema(
         "Please make sure your email address is formatted correctly.",
       ],
       match: [
-        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/,
+        /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
         "Please make sure your email address is formatted correctly.",
       ],
     },
